@@ -1,10 +1,7 @@
  
- Cordova插件，与ionic3插件ionic-native-sharesdk搭配使用  详情请见快码•魔术师开发框架 https://www.kuai.ma
+Cordova插件，与ionic3插件ionic-native-sharesdk搭配使用
 
-
- 该插件使用ShareSDK作为分享插件，使用版本为ShareSDK For Android v3.1.0，ShareSDK For iOS v4.0.2，目前支持微信、腾讯QQ、新浪微博、邮件、短信 
-
- Requires Cordova plugin: `cordova-plugin-sharesdk`. For more info, please see the [ShareSDK plugin docs](https://github.com/kuaimacode/cordova-plugin-sharesdk).
+该插件使用ShareSDK作为分享插件，使用版本为ShareSDK For Android v3.1.0，ShareSDK For iOS v4.0.2，目前支持微信、腾讯QQ、新浪微博、邮件、短信 
 
 
  1、安装
