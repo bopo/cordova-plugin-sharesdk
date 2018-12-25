@@ -8,8 +8,12 @@
 
 
  1、安装
- ionic cordova plugin add https://github.com/kuaimacode/cordova-plugin-sharesdk.git --save --variable Mob_AppKey="xxx" --variable Mob_AppSecret="xxx"
- npm install git+https://github.com/kuaimacode/ionic-native-sharesdk.git
+ ```
+ ionic cordova plugin add https://github.com/bopo/cordova-plugin-sharesdk2.git --save \
+      --variable Mob_AppKey="xxx" --variable Mob_AppSecret="xxx"
+      
+ npm install git+https://github.com/bopo/ionic-native-sharesdk.git
+ ```
 
 
  2、配置参数
