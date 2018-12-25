@@ -1,10 +1,8 @@
 var pluginName = "ShareSDKPlugin";
-var ShareSDKPlugin = {
-};
-
+var ShareSDKPlugin = {};
 
 //分享
-ShareSDKPlugin.share = function (successCallback,errorCallback,params) {
+ShareSDKPlugin.share = function (successCallback, errorCallback, params) {
     var result = undefined;
     if(Array.isArray(params)){
         result = params;
@@ -13,5 +11,5 @@ ShareSDKPlugin.share = function (successCallback,errorCallback,params) {
     }
     cordova.exec(successCallback, errorCallback, pluginName, "share", result);
 };
-module.exports = ShareSDKPlugin;
 
+module.exports = ShareSDKPlugin;

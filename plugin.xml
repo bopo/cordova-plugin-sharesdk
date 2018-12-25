@@ -1,281 +1,424 @@
 <?xml version="1.0" encoding="utf-8"?>
-<plugin id="cordova-plugin-sharesdk" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-sharesdk"
+    version="0.0.1"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0">
     <name>ShareSDKPlugin</name>
     <description>ShareSDKPlugin</description>
     <!-- add this to your config.xml -->
 
     <!--require cordova version -->
     <engines>
-        <engine name="cordova" version=">=3.5.0"/>
+        <engine name="cordova" version=">=3.5.0" />
     </engines>
-    <js-module src="www/ShareSDKPlugin.js" name="ShareSDKPlugin">
-        <clobbers target="ShareSDKPlugin"/>
+    <js-module name="ShareSDKPlugin" src="www/ShareSDKPlugin.js">
+        <clobbers target="ShareSDKPlugin" />
     </js-module>
     <platform name="android">
-        <hook type="after_plugin_install" src="scripts/android/android_after_plugin_install.js"/>
-        <hook type="before_prepare" src="scripts/android/android_after_plugin_install.js"/>
-        <config-file target="config.xml" parent="/*">
+        <!-- <hook src="scripts/android/android_after_plugin_install.js" type="after_plugin_install" /> -->
+        <!-- <hook src="scripts/android/android_after_plugin_install.js" type="before_prepare" /> -->
+        <config-file parent="/*" target="config.xml">
             <feature name="ShareSDKPlugin">
-                <param name="android-package" value="ma.kuai.magicican.sharesdk.ShareSDKPlugin"/>
+                <param name="android-package" value="ma.kuai.magicican.sharesdk.ShareSDKPlugin" />
+            </feature>
+            <feature name="WXEntryActivity">
+                <param name="android-package" value="ma.kuai.magicican.sharesdk.WXEntryActivity" />
             </feature>
         </config-file>
-        <config-file target="AndroidManifest.xml" parent="/*">
-			<!-- 添加必要的权限 -->
-			<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-			<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-			<uses-permission android:name="android.permission.GET_TASKS" />
-			<uses-permission android:name="android.permission.INTERNET" />
-			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-			<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-			<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-			<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-			<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-			<!-- 短信验证登陆功能需要添加次权限来自动填充验证码，用不到可以去掉 -->
-			<uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <!-- 添加必要的权限 -->
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.GET_TASKS" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+            <!-- 短信验证登陆功能需要添加次权限来自动填充验证码，用不到可以去掉 -->
+            <!--<uses-permission android:name="android.permission.RECEIVE_SMS" />-->
         </config-file>
 
         <!-- Plugin Source -->
-        <source-file src="src/android/ShareSDKPlugin.java" target-dir="src/ma/kuai/magicican/sharesdk"/>
+        <source-file src="src/android/ShareSDKPlugin.java"
+            target-dir="src/ma/kuai/magicican/sharesdk" />
+        
+        <source-file src="src/android/WXEntryActivity.java"
+            target-dir="src/ma/kuai/magicican/sharesdk" />
 
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+        <config-file parent="/manifest/application" target="AndroidManifest.xml">
 
 
-		   <!-- ShareSDK的activity -->
-			<activity
-				 android:name="com.mob.tools.MobUIShell"
-				 android:theme="@android:style/Theme.Translucent.NoTitleBar"
-				 android:configChanges="keyboardHidden|orientation|screenSize"
-				 android:windowSoftInputMode="stateHidden|adjustResize" >
+            <!-- ShareSDK的activity -->
+            <activity android:name="com.mob.tools.MobUIShell"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                android:windowSoftInputMode="stateHidden|adjustResize">
 
-				<!-- 调用新浪原生SDK，需要注册的回调activity -->
-				<intent-filter>
-					<action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-					<category android:name="android.intent.category.DEFAULT" />
-				</intent-filter>
-			</activity>
+                <!-- 调用新浪原生SDK，需要注册的回调activity -->
+                <intent-filter>
+                    <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+            </activity>
 
             <!--QQ分享回调 -->
-			<activity
-				 android:name="cn.sharesdk.tencent.qq.ReceiveActivity"
-				 android:launchMode="singleTask"
-				 android:noHistory="true">
-				 <intent-filter>
-					 <action android:name="android.intent.action.VIEW" />
-					  <category android:name="android.intent.category.DEFAULT" />
-					  <category android:name="android.intent.category.BROWSABLE" />
-					  <data android:scheme="tencent100371282" />
-				 </intent-filter>
-			</activity>
+            <activity android:name="cn.sharesdk.tencent.qq.ReceiveActivity"
+                android:launchMode="singleTask" android:noHistory="true">
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <data android:scheme="tencent100371282" />
+                </intent-filter>
+            </activity>
 
 
             <!--微信分享回调 -->
-			<activity     
-				android:name=".wxapi.WXEntryActivity"
-				android:theme="@android:style/Theme.Translucent.NoTitleBar"     
-				android:configChanges="keyboardHidden|orientation|screenSize"     
-				android:exported="true"     
-				android:screenOrientation="portrait" />
+            <activity android:name="ma.kuai.magicican.sharesdk.WXEntryActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:exported="true"
+                android:screenOrientation="portrait" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
             <!-- **************** 如果有使用微信支付插件，请注释掉上面的代码 **************-->
 
 
-			<!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->
-			<meta-data android:name="Mob-AppKey" android:value="$Mob_AppKey"/>
-			<meta-data android:name="Mob-AppSecret" android:value="$Mob_AppSecret"/>
+            <!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->
+            <meta-data android:name="Mob-AppKey" android:value="$Mob_AppKey" />
+            <meta-data android:name="Mob-AppSecret" android:value="$Mob_AppSecret" />
 
 
         </config-file>
 
         <!-- ShareSDK Libs -->
-        <lib-file src="src/android/ShareSDK/libs/MobCommons-2017.0914.1125.jar"/>
-        <lib-file src="src/android/ShareSDK/libs/MobTools-2017.0914.1125.jar"/>
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Core-3.1.0.jar"/>
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Email-3.1.0.jar"/>
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-QQ-3.1.0.jar"/>
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-ShortMessage-3.1.0.jar"/>
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-SinaWeibo-3.1.0.jar"/>
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-3.1.0.jar"/>
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-Core-3.1.0.jar"/>
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-Moments-3.1.0.jar"/>
+        <lib-file src="src/android/ShareSDK/libs/MobCommons-2017.0914.1125.jar" />
+        <lib-file src="src/android/ShareSDK/libs/MobTools-2017.0914.1125.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Core-3.1.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Email-3.1.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-QQ-3.1.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-ShortMessage-3.1.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-SinaWeibo-3.1.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-3.1.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-Core-3.1.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-Moments-3.1.0.jar" />
 
         <!-- ShareSDK Res -->
-		<source-file src="src/android/ShareSDK/res/drawable/ssdk_oks_classic_platform_cell_back.xml" target-dir="res/drawable"/>
-		<source-file src="src/android/ShareSDK/res/drawable/ssdk_oks_classic_progressbar.xml" target-dir="res/drawable"/>
+        <source-file src="src/android/ShareSDK/res/drawable/ssdk_oks_classic_platform_cell_back.xml"
+            target-dir="res/drawable" />
+        <source-file src="src/android/ShareSDK/res/drawable/ssdk_oks_classic_progressbar.xml"
+            target-dir="res/drawable" />
 
-		<source-file src="src/android/ShareSDK/res/drawable-hdpi/ssdk_oks_ptr_ptr.png" target-dir="res/drawable-hdpi"/>
+        <source-file src="src/android/ShareSDK/res/drawable-hdpi/ssdk_oks_ptr_ptr.png"
+            target-dir="res/drawable-hdpi" />
 
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_auth_title_back.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_back_arr.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_country_back_arrow.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_country_clear_search.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_country_cl_divider.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_country_search_icon.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_country_sharesdk_icon.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_input_bg_focus.9.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_logo.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_alipay.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_alipaymoments.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_bluetooth.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_check_checked.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_check_default.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_dingding.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_douban.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_dropbox.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_email.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_evernote.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_facebook.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_facebookmessenger.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_flickr.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_foursquare.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_googleplus.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_instagram.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_instapaper.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_kaixin.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_kakaostory.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_kakaotalk.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_laiwang.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_laiwangmoments.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_line.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_linkedin.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_meipai.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_mingdao.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_pinterest.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_pocket.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_qq.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_qzone.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_renren.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_shortmessage.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_sinaweibo.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_telegram.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_tencentweibo.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_tumblr.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_twitter.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_vkontakte.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_wechat.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_wechatfavorite.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_wechatmoments.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_whatsapp.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_yixin.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_yixinmoments.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_youdao.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_youtube.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_title_div.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_weibo_common_shadow_top.9.png" target-dir="res/drawable-xhdpi"/>
-		<source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_weibo_empty_failed.png" target-dir="res/drawable-xhdpi"/>
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_auth_title_back.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_back_arr.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_country_back_arrow.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_country_clear_search.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_country_cl_divider.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_country_search_icon.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_country_sharesdk_icon.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_input_bg_focus.9.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_logo.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_alipay.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file
+            src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_alipaymoments.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_bluetooth.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file
+            src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_check_checked.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file
+            src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_check_default.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_dingding.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_douban.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_dropbox.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_email.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_evernote.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_facebook.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file
+            src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_facebookmessenger.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_flickr.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_foursquare.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_googleplus.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_instagram.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_instapaper.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_kaixin.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_kakaostory.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_kakaotalk.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_laiwang.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file
+            src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_laiwangmoments.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_line.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_linkedin.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_meipai.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_mingdao.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_pinterest.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_pocket.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_qq.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_qzone.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_renren.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_shortmessage.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_sinaweibo.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_telegram.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_tencentweibo.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_tumblr.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_twitter.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_vkontakte.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_wechat.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file
+            src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_wechatfavorite.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file
+            src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_wechatmoments.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_whatsapp.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_yixin.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_yixinmoments.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_youdao.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_oks_classic_youtube.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_title_div.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file
+            src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_weibo_common_shadow_top.9.png"
+            target-dir="res/drawable-xhdpi" />
+        <source-file src="src/android/ShareSDK/res/drawable-xhdpi/ssdk_weibo_empty_failed.png"
+            target-dir="res/drawable-xhdpi" />
 
 
-		<source-file src="src/android/ShareSDK/res/values/ssdk_coutry_arrays.xml" target-dir="res/values"/>
-		<source-file src="src/android/ShareSDK/res/values/ssdk_instapaper_strings.xml" target-dir="res/values"/>
-		<source-file src="src/android/ShareSDK/res/values/ssdk_oks_color_drawables.xml" target-dir="res/values"/>
-		<source-file src="src/android/ShareSDK/res/values/ssdk_oks_strings.xml" target-dir="res/values"/>
-		<source-file src="src/android/ShareSDK/res/values/ssdk_strings.xml" target-dir="res/values"/>
+        <source-file src="src/android/ShareSDK/res/values/ssdk_coutry_arrays.xml"
+            target-dir="res/values" />
+        <source-file src="src/android/ShareSDK/res/values/ssdk_instapaper_strings.xml"
+            target-dir="res/values" />
+        <source-file src="src/android/ShareSDK/res/values/ssdk_oks_color_drawables.xml"
+            target-dir="res/values" />
+        <source-file src="src/android/ShareSDK/res/values/ssdk_oks_strings.xml"
+            target-dir="res/values" />
+        <source-file src="src/android/ShareSDK/res/values/ssdk_strings.xml"
+            target-dir="res/values" />
 
-		<source-file src="src/android/ShareSDK/res/values-en/ssdk_country_arrays.xml" target-dir="res/values-en"/>
-		<source-file src="src/android/ShareSDK/res/values-en/ssdk_oks_strings.xml" target-dir="res/values-en"/>
-		<source-file src="src/android/ShareSDK/res/values-en/ssdk_strings.xml" target-dir="res/values-en"/>
-
+        <source-file src="src/android/ShareSDK/res/values-en/ssdk_country_arrays.xml"
+            target-dir="res/values-en" />
+        <source-file src="src/android/ShareSDK/res/values-en/ssdk_oks_strings.xml"
+            target-dir="res/values-en" />
+        <source-file src="src/android/ShareSDK/res/values-en/ssdk_strings.xml"
+            target-dir="res/values-en" />
 
 
         <!-- ShareSDK Sources -->
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/CustomerLogo.java"  target-dir="src/cn/sharesdk/onekeyshare"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/OnekeyShare.java"  target-dir="src/cn/sharesdk/onekeyshare"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/OnekeySharePage.java"  target-dir="src/cn/sharesdk/onekeyshare"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/OnekeyShareTheme.java"  target-dir="src/cn/sharesdk/onekeyshare"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/OnekeyShareThemeImpl.java"  target-dir="src/cn/sharesdk/onekeyshare"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/ShareContentCustomizeCallback.java"  target-dir="src/cn/sharesdk/onekeyshare"/>
+        <source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/CustomerLogo.java"
+            target-dir="src/cn/sharesdk/onekeyshare" />
+        <source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/OnekeyShare.java"
+            target-dir="src/cn/sharesdk/onekeyshare" />
+        <source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/OnekeySharePage.java"
+            target-dir="src/cn/sharesdk/onekeyshare" />
+        <source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/OnekeyShareTheme.java"
+            target-dir="src/cn/sharesdk/onekeyshare" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/OnekeyShareThemeImpl.java"
+            target-dir="src/cn/sharesdk/onekeyshare" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/ShareContentCustomizeCallback.java"
+            target-dir="src/cn/sharesdk/onekeyshare" />
 
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/ClassicTheme.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/EditPage.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/FriendAdapter.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/FriendListItem.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/FriendListPage.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/IndicatorView.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/PicViewerPage.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/PlatformPage.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/PlatformPageAdapter.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/PRTHeader.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/RotateImageView.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/XView.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic"/>
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/ClassicTheme.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/EditPage.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/FriendAdapter.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/FriendListItem.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/FriendListPage.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/IndicatorView.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/PicViewerPage.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/PlatformPage.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/PlatformPageAdapter.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/PRTHeader.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/RotateImageView.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/XView.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic" />
 
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/land/EditPageLand.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic/land"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/land/FriendListPageLand.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic/land"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/land/PlatformPageAdapterLand.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic/land"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/land/PlatformPageLand.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic/land"/>
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/land/EditPageLand.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic/land" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/land/FriendListPageLand.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic/land" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/land/PlatformPageAdapterLand.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic/land" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/land/PlatformPageLand.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic/land" />
 
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/port/EditPagePort.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic/port"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/port/FriendListPagePort.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic/port"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/port/PlatformPageAdapterPort.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic/port"/>
-		<source-file src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/port/PlatformPagePort.java"  target-dir="src/cn/sharesdk/onekeyshare/themes/classic/port"/>
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/port/EditPagePort.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic/port" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/port/FriendListPagePort.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic/port" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/port/PlatformPageAdapterPort.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic/port" />
+        <source-file
+            src="src/android/ShareSDK/src/cn/sharesdk/onekeyshare/themes/classic/port/PlatformPagePort.java"
+            target-dir="src/cn/sharesdk/onekeyshare/themes/classic/port" />
 
     </platform>
 
     <platform name="ios">
 
-        <config-file target="config.xml" parent="/*">
+        <config-file parent="/*" target="config.xml">
             <feature name="ShareSDKPlugin">
-                <param name="ios-package" value="ShareSDKPlugin"/>
+                <param name="ios-package" value="ShareSDKPlugin" />
             </feature>
         </config-file>
 
-		<!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->
-		<config-file target="*-Info.plist" parent="MOBAppKey">
-			<string>$Mob_AppKey</string>
-		</config-file>
-		<config-file target="*-Info.plist" parent="MOBAppSecret">
-			<string>$Mob_AppSecret</string>
-		</config-file>
+        <!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->
+        <config-file parent="MOBAppKey" target="*-Info.plist">
+            <string>$Mob_AppKey</string>
+        </config-file>
+        <config-file parent="MOBAppSecret" target="*-Info.plist">
+            <string>$Mob_AppSecret</string>
+        </config-file>
 
-        <header-file src="src/ios/ShareSDKPlugin.h"/>
-        <source-file src="src/ios/ShareSDKPlugin.m"/>
+        <header-file src="src/ios/ShareSDKPlugin.h" />
+        <source-file src="src/ios/ShareSDKPlugin.m" />
 
         <!-- Other required frameworks -->
-        <framework src="MessageUI.framework"/>
-        <framework src="libz.tbd"/>
-        <framework src="libicucore.tbd"/>
-        <framework src="libstdc++.tbd"/>
-        <framework src="JavaScriptCore.framework"/>
-        <framework src="ImageIO.framework"/>
-        <framework src="libsqlite3.tbd"/>
+        <framework src="MessageUI.framework" />
+        <framework src="libz.tbd" />
+        <framework src="libicucore.tbd" />
+        <framework src="libstdc++.tbd" />
+        <framework src="JavaScriptCore.framework" />
+        <framework src="ImageIO.framework" />
+        <framework src="libsqlite3.tbd" />
 
         <!-- ShareSDK -->
-        <framework src="src/ios/ShareSDK/MOBFoundation.framework" custom="true"/>
-        <framework src="src/ios/ShareSDK/ShareSDK.framework" custom="true"/>
+        <framework custom="true" src="src/ios/ShareSDK/MOBFoundation.framework" />
+        <framework custom="true" src="src/ios/ShareSDK/ShareSDK.framework" />
         <!-- Support -->
-        <framework src="src/ios/ShareSDK/Support/Optional/ShareSDKConfigFile.framework" custom="true"/>
-        <framework src="src/ios/ShareSDK/Support/Optional/ShareSDKExtension.framework" custom="true"/>
-        <framework src="src/ios/ShareSDK/Support/Optional/ShareSDKUI.framework" custom="true"/>
-        <resource-file src="src/ios/ShareSDK/Support/Optional/ShareSDKConfigFile.bundle"/>
-        <resource-file src="src/ios/ShareSDK/Support/Optional/ShareSDKUI.bundle"/>
+        <framework custom="true"
+            src="src/ios/ShareSDK/Support/Optional/ShareSDKConfigFile.framework" />
+        <framework custom="true"
+            src="src/ios/ShareSDK/Support/Optional/ShareSDKExtension.framework" />
+        <framework custom="true" src="src/ios/ShareSDK/Support/Optional/ShareSDKUI.framework" />
+        <resource-file src="src/ios/ShareSDK/Support/Optional/ShareSDKConfigFile.bundle" />
+        <resource-file src="src/ios/ShareSDK/Support/Optional/ShareSDKUI.bundle" />
 
 
-        <framework src="src/ios/ShareSDK/Support/PlatformConnector/CopyConnector.framework" custom="true"/>
-        <framework src="src/ios/ShareSDK/Support/PlatformConnector/MailConnector.framework" custom="true"/>
-        <framework src="src/ios/ShareSDK/Support/PlatformConnector/QQConnector.framework" custom="true"/>
-        <framework src="src/ios/ShareSDK/Support/PlatformConnector/SinaWeiboConnector.framework" custom="true"/>
-        <framework src="src/ios/ShareSDK/Support/PlatformConnector/SMSConnector.framework" custom="true"/>
-        <framework src="src/ios/ShareSDK/Support/PlatformConnector/WechatConnector.framework" custom="true"/>
+        <framework custom="true"
+            src="src/ios/ShareSDK/Support/PlatformConnector/CopyConnector.framework" />
+        <framework custom="true"
+            src="src/ios/ShareSDK/Support/PlatformConnector/MailConnector.framework" />
+        <framework custom="true"
+            src="src/ios/ShareSDK/Support/PlatformConnector/QQConnector.framework" />
+        <framework custom="true"
+            src="src/ios/ShareSDK/Support/PlatformConnector/SinaWeiboConnector.framework" />
+        <framework custom="true"
+            src="src/ios/ShareSDK/Support/PlatformConnector/SMSConnector.framework" />
+        <framework custom="true"
+            src="src/ios/ShareSDK/Support/PlatformConnector/WechatConnector.framework" />
 
 
-        <framework src="src/ios/ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenAPI.framework" custom="true"/>
-        <resource-file src="src/ios/ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenApi_IOS_Bundle.bundle"/>
+        <framework custom="true"
+            src="src/ios/ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenAPI.framework" />
+        <resource-file
+            src="src/ios/ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenApi_IOS_Bundle.bundle" />
 
 
-        <resource-file src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WeiboSDK.bundle"/>
-        <source-file src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/libWeiboSDK.a" framework="true"/>
-        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WBHttpRequest.h"/>
-        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WBHttpRequest+WeiboToken.h"/>
-        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WeiboSDK.h"/>
-        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WeiboSDK+Statistics.h"/>
+        <resource-file src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WeiboSDK.bundle" />
+        <source-file framework="true"
+            src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/libWeiboSDK.a" />
+        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WBHttpRequest.h" />
+        <header-file
+            src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WBHttpRequest+WeiboToken.h" />
+        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WeiboSDK.h" />
+        <header-file
+            src="src/ios/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WeiboSDK+Statistics.h" />
 
 
-        <source-file src="src/ios/ShareSDK/Support/PlatformSDK/WeChatSDK/libWeChatSDK.a" framework="true"/>
-        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/WeChatSDK/WechatAuthSDK.h"/>
-        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/WeChatSDK/WXApi.h"/>
-        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/WeChatSDK/WXApiObject.h"/>
+        <source-file framework="true"
+            src="src/ios/ShareSDK/Support/PlatformSDK/WeChatSDK/libWeChatSDK.a" />
+        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/WeChatSDK/WechatAuthSDK.h" />
+        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/WeChatSDK/WXApi.h" />
+        <header-file src="src/ios/ShareSDK/Support/PlatformSDK/WeChatSDK/WXApiObject.h" />
 
-        <resource-file src="src/ios/ShareSDK/Support/Required/ShareSDK.bundle"/>
-        <framework src="src/ios/ShareSDK/Support/Required/ShareSDKConnector.framework" custom="true"/>
+        <resource-file src="src/ios/ShareSDK/Support/Required/ShareSDK.bundle" />
+        <framework custom="true"
+            src="src/ios/ShareSDK/Support/Required/ShareSDKConnector.framework" />
 
     </platform>
 </plugin>
