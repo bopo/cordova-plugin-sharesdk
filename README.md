@@ -14,7 +14,7 @@ Cordova插件，与ionic3插件ionic-native-sharesdk搭配使用
 
 
  2、配置参数
-  android下修改，android\ShareSDK\assets\ShareSDK.xml将参数修改为自己的参数
+  android下修改，`android\ShareSDK\assets\ShareSDK.xml` 将参数修改为自己的参数
 
  3、参考代码
  ```
