@@ -1,13 +1,10 @@
-package ma.kuai.magicican.sharesdk;
+package me.bopo.sharesdk;
 
 import android.app.Activity;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 
 import com.mob.MobSDK;
 
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
@@ -19,59 +16,46 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 public class ShareSDKPlugin extends CordovaPlugin {
 
     private Activity activity;
-
-    public ShareSDKPlugin() {
-
-    }
+    private Context mContext;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        
         this.activity = cordova.getActivity();
-
-        try {
-            ApplicationInfo appInfo = activity.getPackageManager().getApplicationInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
-            String appKey = appInfo.metaData.getString("Mob-AppKey");
-            String appSecret = appInfo.metaData.getString("Mob-AppSecret");
-
-            //调用initSDK初始化
-            MobSDK.init(this.activity, appKey, appSecret);
-
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        this.mContext = cordova.getActivity().getApplicationContext();
+        
+        MobSDK.init(this.activity);
     }
 
-
     @Override
-    public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
-        if ("share".equals(action)) {
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (action.equals("share")) {
             return share(args, callbackContext);
         }
-        return super.execute(action, args, callbackContext);
+        return false;
     }
 
 
     /*
      * 分享
      */
-    private boolean share(CordovaArgs args, CallbackContext callbackContext) {
+    private boolean share(JSONArray args, CallbackContext callbackContext) throws JSONException {
 
-        final JSONObject data;
         try {
-            data = args.getJSONObject(0);
-            String title = data.has("title") ? data.getString("title") : "";
-            String titleUrl = data.has("titleUrl") ? data.getString("titleUrl") : "";
-            String url = data.has("url") ? data.getString("url") : "";
-            String text = data.has("text") ? data.getString("text") : "";
-            String siteUrl = data.has("siteUrl") ? data.getString("siteUrl") : "";
-            String siteName = data.has("siteName") ? data.getString("siteName") : "";
-            String image = data.has("image") ? data.getString("image") : "";
+            final JSONObject params = args.getJSONObject(0);
+            String title = params.has("title") ? params.getString("title") : "";
+            String titleUrl = params.has("titleUrl") ? params.getString("titleUrl") : "";
+            String url = params.has("url") ? params.getString("url") : "";
+            String text = params.has("text") ? params.getString("text") : "";
+            String siteUrl = params.has("siteUrl") ? params.getString("siteUrl") : "";
+            String siteName = params.has("siteName") ? params.getString("siteName") : "";
+            String image = params.has("image") ? params.getString("image") : "";
 
             OnekeyShare oks = new OnekeyShare();
+
             //关闭sso授权
             oks.disableSSOWhenAuthorize();
-
             // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
             //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
             // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
@@ -90,17 +74,15 @@ public class ShareSDKPlugin extends CordovaPlugin {
             if (siteName.isEmpty()) oks.setSite(siteName);
             // siteUrl是分享此内容的网站地址，仅在QQ空间使用
             if (siteUrl.isEmpty()) oks.setSiteUrl(siteUrl);
-
             // 启动分享GUI
-            oks.show(this.activity);
-
+            oks.show(cordova.getActivity());
             return true;
-
         } catch (JSONException e) {
-            return false;
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
+        } catch (Exception e) {
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.toString()));
         }
     }
-
 }
 
 

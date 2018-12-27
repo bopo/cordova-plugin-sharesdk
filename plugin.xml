@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-sharesdk"
-    version="0.0.1"
-    xmlns="http://apache.org/cordova/ns/plugins/1.0">
+    version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0">
     <name>ShareSDKPlugin</name>
     <description>ShareSDKPlugin</description>
     <!-- add this to your config.xml -->
@@ -10,18 +9,21 @@
     <engines>
         <engine name="cordova" version=">=3.5.0" />
     </engines>
+
     <js-module name="ShareSDKPlugin" src="www/ShareSDKPlugin.js">
         <clobbers target="ShareSDKPlugin" />
     </js-module>
+
     <platform name="android">
         <!-- <hook src="scripts/android/android_after_plugin_install.js" type="after_plugin_install" /> -->
         <!-- <hook src="scripts/android/android_after_plugin_install.js" type="before_prepare" /> -->
+
         <config-file parent="/*" target="config.xml">
             <feature name="ShareSDKPlugin">
-                <param name="android-package" value="ma.kuai.magicican.sharesdk.ShareSDKPlugin" />
+                <param name="android-package" value="package me.bopo.sharesdk.ShareSDKPlugin" />
             </feature>
             <feature name="WXEntryActivity">
-                <param name="android-package" value="ma.kuai.magicican.sharesdk.WXEntryActivity" />
+                <param name="android-package" value="package me.bopo.sharesdk.WXEntryActivity" />
             </feature>
         </config-file>
 
@@ -43,20 +45,18 @@
 
         <!-- Plugin Source -->
         <source-file src="src/android/ShareSDKPlugin.java"
-            target-dir="src/ma/kuai/magicican/sharesdk" />
-        
+            target-dir="src/me/bopo/sharesdk" />
+
         <source-file src="src/android/WXEntryActivity.java"
-            target-dir="src/ma/kuai/magicican/sharesdk" />
+            target-dir="src/me/bopo/sharesdk" />
 
         <config-file parent="/manifest/application" target="AndroidManifest.xml">
-
 
             <!-- ShareSDK的activity -->
             <activity android:name="com.mob.tools.MobUIShell"
                 android:configChanges="keyboardHidden|orientation|screenSize"
                 android:theme="@android:style/Theme.Translucent.NoTitleBar"
                 android:windowSoftInputMode="stateHidden|adjustResize">
-
                 <!-- 调用新浪原生SDK，需要注册的回调activity -->
                 <intent-filter>
                     <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
@@ -75,37 +75,35 @@
                 </intent-filter>
             </activity>
 
-
             <!--微信分享回调 -->
-            <activity android:name="ma.kuai.magicican.sharesdk.WXEntryActivity"
+            <activity android:name="package me.bopo.sharesdk.WXEntryActivity"
                 android:configChanges="keyboardHidden|orientation|screenSize"
-                android:exported="true"
-                android:screenOrientation="portrait" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+                android:exported="true" android:screenOrientation="portrait"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
             <!-- **************** 如果有使用微信支付插件，请注释掉上面的代码 **************-->
-
-
             <!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->
-            <meta-data android:name="Mob-AppKey" android:value="$Mob_AppKey" />
-            <meta-data android:name="Mob-AppSecret" android:value="$Mob_AppSecret" />
-
-
+            <meta-data android:name="Mob-AppKey" android:value="$MOB_APPKEY" />
+            <meta-data android:name="Mob-AppSecret" android:value="$MOB_SECRET" />
+            
         </config-file>
 
         <!-- ShareSDK Libs -->
-        <lib-file src="src/android/ShareSDK/libs/MobCommons-2017.0914.1125.jar" />
-        <lib-file src="src/android/ShareSDK/libs/MobTools-2017.0914.1125.jar" />
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Core-3.1.0.jar" />
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Email-3.1.0.jar" />
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-QQ-3.1.0.jar" />
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-ShortMessage-3.1.0.jar" />
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-SinaWeibo-3.1.0.jar" />
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-3.1.0.jar" />
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-Core-3.1.0.jar" />
-        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-Moments-3.1.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/MobCommons-2018.1128.1916.jar" />
+        <lib-file src="src/android/ShareSDK/libs/MobTools-2018.1128.1916.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Core-3.4.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Email-3.4.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-QQ-3.4.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-ShortMessage-3.4.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-SinaWeibo-3.4.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-3.4.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-Core-3.4.0.jar" />
+        <lib-file src="src/android/ShareSDK/libs/ShareSDK-Wechat-Moments-3.4.0.jar" />
 
         <!-- ShareSDK Res -->
         <source-file src="src/android/ShareSDK/res/drawable/ssdk_oks_classic_platform_cell_back.xml"
             target-dir="res/drawable" />
+
         <source-file src="src/android/ShareSDK/res/drawable/ssdk_oks_classic_progressbar.xml"
             target-dir="res/drawable" />
 
@@ -417,6 +415,7 @@
         <header-file src="src/ios/ShareSDK/Support/PlatformSDK/WeChatSDK/WXApiObject.h" />
 
         <resource-file src="src/ios/ShareSDK/Support/Required/ShareSDK.bundle" />
+
         <framework custom="true"
             src="src/ios/ShareSDK/Support/Required/ShareSDKConnector.framework" />
 
