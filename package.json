@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kuaimacode/cordova-plugin-sharesdk.git"
+    "url": "git+https://github.com/bopo/cordova-plugin-sharesdk.git"
   },
   "keywords": [
     "cordova",
@@ -17,10 +17,10 @@
     "sharesdk",
     "share"
   ],
-  "author": "Kuaima",
+  "author": "bopo wang",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kuaimacode/cordova-plugin-sharesdk/issues"
+    "url": "https://github.com/bopo/cordova-plugin-sharesdk/issues"
   },
-  "homepage": "https://github.com/kuaimacode/cordova-plugin-sharesdk#readme"
+  "homepage": "https://github.com/bopo/cordova-plugin-sharesdk#readme"
 }

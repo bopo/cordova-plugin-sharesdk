@@ -5,12 +5,6 @@
 @implementation ShareSDKPlugin
 #pragma mark "API"
 
-- (void)share:(CDVInvokedUrlCommand*)command {
-
-
-
-}
-
+- (void)share:(CDVInvokedUrlCommand*)command {}
 
 @end
-

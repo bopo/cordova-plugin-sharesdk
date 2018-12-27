@@ -30,13 +30,42 @@ public class ShareSDKPlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (action.equals("setup")) {
+            return setup(args, callbackContext);
+        }
+
         if (action.equals("share")) {
             return share(args, callbackContext);
         }
+
         return false;
     }
 
+    /*
+     * 初始化
+     */
+    private boolean setup(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        try {
+            final JSONObject params = args.getJSONObject(0);
 
+            String appkey = params.has("appkey") ? params.getString("appkey") : ""; 
+            String secret = params.has("secret") ? params.getString("secret") : "";
+
+            if (appkey != '' && secret != '') {
+                MobSDK.init(this.activity, appkey, secret);
+            } else {
+                MobSDK.init(this.activity);
+            }
+
+            return true
+        } catch (JSONException e) {
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
+        } catch (Exception e) {
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.toString()));
+        }
+
+        return false;
+    }
     /*
      * 分享
      */
@@ -44,6 +73,7 @@ public class ShareSDKPlugin extends CordovaPlugin {
 
         try {
             final JSONObject params = args.getJSONObject(0);
+
             String title = params.has("title") ? params.getString("title") : "";
             String titleUrl = params.has("titleUrl") ? params.getString("titleUrl") : "";
             String url = params.has("url") ? params.getString("url") : "";
@@ -76,12 +106,15 @@ public class ShareSDKPlugin extends CordovaPlugin {
             if (siteUrl.isEmpty()) oks.setSiteUrl(siteUrl);
             // 启动分享GUI
             oks.show(cordova.getActivity());
+
             return true;
         } catch (JSONException e) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
         } catch (Exception e) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.toString()));
         }
+
+        return false
     }
 }
 

@@ -10,7 +10,7 @@ function ShareSDKPlugin () {}
 /**
  * Sets the ShareSDKPlugin content
  *
- * @param {String}   text      The content to share to the ShareSDKPlugin
+ * @param {Array}   params	   The content to share to the ShareSDKPlugin
  * @param {Function} onSuccess The function to call in case of success (takes the copied text as argument)
  * @param {Function} onFail    The function to call in case of error
  */
