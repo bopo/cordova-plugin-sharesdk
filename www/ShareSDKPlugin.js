@@ -26,6 +26,18 @@ ShareSDKPlugin.prototype.share = function (params, onSuccess, onFail) {
 	cordova.exec(onSuccess, onFail, "ShareSDKPlugin", "share", options);
 };
 
+ShareSDKPlugin.prototype.setup = function (params, onSuccess, onFail) {
+    if (typeof params === "undefined" || params === null) params = "";
+    var options = undefined;
+
+    if(Array.isArray(params)){
+        options = params;
+    }else{
+        options = [params]
+    }    
+	cordova.exec(onSuccess, onFail, "ShareSDKPlugin", "setup", options);
+};
+
 // Register the plugin
 var ShareSDKPlugin = new ShareSDKPlugin();
 module.exports = ShareSDKPlugin;

@@ -18,6 +18,11 @@
         <!-- <hook src="scripts/android/android_after_plugin_install.js" type="after_plugin_install" /> -->
         <!-- <hook src="scripts/android/android_after_plugin_install.js" type="before_prepare" /> -->
 
+        <hook type="after_plugin_add" src="scripts/android-install.js" />
+        <hook type="after_plugin_install" src="scripts/android-install.js" />
+        <hook type="before_plugin_rm" src="scripts/android-install.js" />
+        <hook type="before_plugin_uninstall" src="scripts/android-install.js" />
+
         <config-file parent="/*" target="config.xml">
             <feature name="ShareSDKPlugin">
                 <param name="android-package" value="package me.bopo.sharesdk.ShareSDKPlugin" />
