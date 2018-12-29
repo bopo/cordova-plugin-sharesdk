@@ -1,0 +1,35 @@
+apply plugin: 'com.mob.sdk'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+	classpath 'com.mob.sdk:MobSDK:+'
+}
+
+MobSDK {
+    appKey "28d3710330de1"
+    appSecret "a124d1bb785509441faf6e0a42ac272c"
+
+    ShareSDK {
+        //平台配置信息
+        devInfo {
+            SinaWeibo {
+                appKey "568898243"
+                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+                callbackUri "http://www.sharesdk.cn"
+                shareByAppClient false
+            }
+            Wechat {
+                appId "wxb354931f935bec57"
+                appSecret "916eca5eee56889b336c766f022fd7bf"
+            }
+            QQ {
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+            }
+        }
+    }
+   
+}
