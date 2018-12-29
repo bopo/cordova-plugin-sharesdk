@@ -14,9 +14,14 @@
         <clobbers target="ShareSDKPlugin" />
     </js-module>
 
+    <preference name="MOB_APPKEY" />
+    <preference name="MOB_SECRET" />
+
+
     <platform name="android">
         <!-- <hook src="scripts/android/android_after_plugin_install.js" type="after_plugin_install" /> -->
         <!-- <hook src="scripts/android/android_after_plugin_install.js" type="before_prepare" /> -->
+        <framework src="android-build.gradle" custom="true" type="gradleReference" />
 
         <hook type="after_plugin_add" src="scripts/android-install.js" />
         <hook type="after_plugin_install" src="scripts/android-install.js" />
@@ -25,10 +30,10 @@
 
         <config-file parent="/*" target="config.xml">
             <feature name="ShareSDKPlugin">
-                <param name="android-package" value="package me.bopo.sharesdk.ShareSDKPlugin" />
+                <param name="android-package" value="me.bopo.sharesdk.ShareSDKPlugin" />
             </feature>
             <feature name="WXEntryActivity">
-                <param name="android-package" value="package me.bopo.sharesdk.WXEntryActivity" />
+                <param name="android-package" value="me.bopo.sharesdk.WXEntryActivity" />
             </feature>
         </config-file>
 
@@ -66,7 +71,7 @@
                 <intent-filter>
                     <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
                     <category android:name="android.intent.category.DEFAULT" />
-                </intent-filter>
+                </intent-filter>            
             </activity>
 
             <!--QQ分享回调 -->
@@ -81,10 +86,11 @@
             </activity>
 
             <!--微信分享回调 -->
-            <activity android:name="package me.bopo.sharesdk.WXEntryActivity"
+            <activity android:name=".wxapi.WXEntryActivity"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar" 
                 android:configChanges="keyboardHidden|orientation|screenSize"
                 android:exported="true" android:screenOrientation="portrait"
-                android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            />
 
             <!-- **************** 如果有使用微信支付插件，请注释掉上面的代码 **************-->
             <!-- 填写您从Mob开发者后台中得到的Appkey和AppSecret -->

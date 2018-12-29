@@ -32,12 +32,28 @@ module.exports = function (context) {
         if(err){
             console.info(err);
             throw err;
-        }
+        } 
+        // <application tools:replace="android:name">
+        
         if (data.indexOf('android:name="com.mob.MobApplication"') == -1) {
             data = data.replace(/<application/g, '<application android:name="com.mob.MobApplication"');
             fs.writeFileSync(xml, data);
         }
     }); 
+
+    shell.mkdir('-p', targetDir);
+
+    // sync the content
+    targetFiles.forEach(function (f) {
+        fs.readFile(path.join(context.opts.plugin.dir, 'src', 'android', f), {encoding: 'utf-8'}, function (err, data) {
+            if (err) {
+                throw err;
+            }
+
+            data = data.replace(/^package __PACKAGE_NAME__;/m, 'package ' + packageName + '.wxapi;');
+            fs.writeFileSync(path.join(targetDir, f), data);
+        });
+    });    
 }
 
 // android:name="com.mob.MobApplication"

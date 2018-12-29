@@ -1,4 +1,4 @@
-package me.bopo.sharesdk;
+package __PACKAGE_NAME__;
 
 import android.content.Intent;
 import android.widget.Toast;

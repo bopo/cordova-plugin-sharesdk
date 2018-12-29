@@ -1,6 +1,7 @@
 package me.bopo.sharesdk;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.mob.MobSDK;
 
@@ -8,6 +9,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,9 +26,9 @@ public class ShareSDKPlugin extends CordovaPlugin {
         super.initialize(cordova, webView);
         
         this.activity = cordova.getActivity();
-        this.mContext = cordova.getActivity().getApplicationContext();
+        this.mContext = webView.getContext();
         
-        MobSDK.init(this.activity);
+        MobSDK.init(this.mContext);
     }
 
     @Override
@@ -52,13 +54,13 @@ public class ShareSDKPlugin extends CordovaPlugin {
             String appkey = params.has("appkey") ? params.getString("appkey") : ""; 
             String secret = params.has("secret") ? params.getString("secret") : "";
 
-            if (appkey != '' && secret != '') {
+            if (!appkey.equals("") && !secret.equals("")) {
                 MobSDK.init(this.activity, appkey, secret);
             } else {
                 MobSDK.init(this.activity);
             }
 
-            return true
+            return true;
         } catch (JSONException e) {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
         } catch (Exception e) {
@@ -105,8 +107,36 @@ public class ShareSDKPlugin extends CordovaPlugin {
             if (siteName.isEmpty()) oks.setSite(siteName);
             // siteUrl是分享此内容的网站地址，仅在QQ空间使用
             if (siteUrl.isEmpty()) oks.setSiteUrl(siteUrl);
+            //自定义分享的回调想要函数
+            oks.setShareContentCustomizeCallback((platform, paramsToShare) -> {
+                //点击微信好友
+                if ("Wechat".equals(platform.getName())) {
+                    //微信分享应用 ,此功能需要微信绕开审核，需要使用项目中的wechatdemo.keystore进行签名打包
+                    //由于Onekeyshare没有关于应用分享的参数如setShareType等，我们需要通过自定义 分享来实现
+                    //比如下面设置了setTitle,可以覆盖oks.setTitle里面的title值
+                    paramsToShare.setTitle("标题");
+                    paramsToShare.setText("内容");
+                    paramsToShare.setShareType(Platform.SHARE_IMAGE);
+//                    paramsToShare.setExtInfo("应用信息");
+//                    paramsToShare.setFilePath("xxxxx.apk");
+                    paramsToShare.setImagePath(image);
+                    Log.d("Wechat", image);
+                }
+                //点击新浪微博
+                if ("SinaWeibo".equals(platform.getName())) {
+                    //限制微博分享的文字不能超过20
+                    if (paramsToShare.getText().length() > 20) {
+                        Toast.makeText(cordova.getActivity(), "分享长度不能超过20个字", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                //点击除了QQ以外的平台
+                if (!"QQ".equals(platform.getName())) {
+                    Log.i("QQ", "点击了QQ以外的平台");
+                }
+            });
+                        
             // 启动分享GUI
-            oks.show(cordova.getActivity());
+            oks.show(webView.getContext());
 
             return true;
         } catch (JSONException e) {
@@ -115,7 +145,7 @@ public class ShareSDKPlugin extends CordovaPlugin {
             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.toString()));
         }
 
-        return false
+        return false;
     }
 }
 
